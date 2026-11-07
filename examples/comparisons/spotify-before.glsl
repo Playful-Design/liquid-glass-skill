@@ -1,0 +1,3 @@
+float curve(vec2 p,float w,float y,float r){float x=clamp(p.x,-w,w);return length(p-vec2(x,y-.31*x*x-.105*x))-r;}
+float logo(vec2 p){return max(length(p)-.74,-min(curve(p,.44,.21,.064),min(curve(p,.38,-.035,.053),curve(p,.32,-.245,.043))));}
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 p=(fragCoord-.5*iResolution.xy)/min(iResolution.x,iResolution.y)*2.;float d=logo(p);float aa=2./min(iResolution.x,iResolution.y);float alpha=1.-smoothstep(-aa,aa,d);float t=iTime*.19;float shine=exp(-11.*pow(p.x+.55*p.y-.18*sin(t),2.));float rim=exp(-abs(d)*35.);vec3 col=vec3(.02,.68,.17)*(.72+.28*shine)+vec3(.45,.9,.6)*(.15*shine+.22*rim);fragColor=vec4(col*alpha,1.);}

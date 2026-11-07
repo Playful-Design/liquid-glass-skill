@@ -1,0 +1,79 @@
+{
+  "about": "Vibes: a mood word -> a Google Font and the settings that make it look good in liquid glass. Used by font_to_glsl.py --vibe NAME and by /liquid-glass ... vibe NAME. Add your own: any Google Fonts family, plus optional style, axes, bg, puff, tracking (em), simplify. Explicit options always win over the vibe.",
+  "vibes": {
+    "adventure": {
+      "google": "Caprasimo",
+      "aliases": [
+        "adventurous",
+        "bold",
+        "explorer",
+        "expedition"
+      ],
+      "mood": "bold, adventurous",
+      "bg": "#12343B"
+    },
+    "cloud": {
+      "google": "Rubik Bubbles",
+      "aliases": [
+        "cloudy",
+        "fluffy",
+        "soft",
+        "bubbly",
+        "bubble",
+        "big and fluffy"
+      ],
+      "mood": "big and fluffy, soft, cloudy",
+      "bg": "#BFD9F2"
+    },
+    "medieval": {
+      "google": "Uncial Antiqua",
+      "aliases": [
+        "fantasy",
+        "celtic",
+        "knight",
+        "castle",
+        "legend"
+      ],
+      "mood": "medieval",
+      "bg": "#14202B"
+    },
+    "romantic": {
+      "google": "Lavishly Yours",
+      "aliases": [
+        "valentine",
+        "love",
+        "wedding",
+        "elegant script"
+      ],
+      "mood": "valentine, romantic",
+      "bg": "#F6D5DC",
+      "puff": 0.08,
+      "notes": "Fine calligraphy: the glass is thin, so a light background suits it best."
+    },
+    "cartoon": {
+      "google": "Henny Penny",
+      "aliases": [
+        "storybook",
+        "old design",
+        "whimsical",
+        "fairy tale",
+        "comic"
+      ],
+      "mood": "old design, cartoon",
+      "bg": "#F2EEE6"
+    },
+    "dripping": {
+      "google": "Rubik Wet Paint",
+      "aliases": [
+        "drip",
+        "drips",
+        "wet paint",
+        "melting",
+        "spooky",
+        "halloween"
+      ],
+      "mood": "dripping letters",
+      "bg": "#0A0A0A"
+    }
+  }
+}

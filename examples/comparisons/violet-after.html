@@ -1,0 +1,28 @@
+<!doctype html><meta charset="utf-8"><title>Shader</title>
+<style>html,body,canvas{display:block;width:100%;height:100%;margin:0;background:#000}</style>
+<canvas id="c"></canvas>
+<script>
+// Runs a Shadertoy-style mainImage file: shader.html?src=name.glsl
+const VS=`#version 300 es
+in vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+const wrap=s=>`#version 300 es
+precision highp float;uniform vec3 iResolution;uniform float iTime;uniform float iTimeDelta;uniform int iFrame;uniform vec4 iMouse;out vec4 o_;
+${s}
+void main(){vec4 v;mainImage(v,gl_FragCoord.xy);o_=vec4(v.rgb,1.);}`;
+(async()=>{
+ const gl=c.getContext("webgl2"),src="#define SKILL 1\n#ifndef SKILL\n#define SKILL 0\n#endif\n// Flowing violet glass: broad folds with nested polished contour ridges.\nvec3 thinFilmPalette(float p){return .5+.5*cos(6.283185*(vec3(p)+vec3(0.,.33,.67)));}\nfloat heightField(vec2 p){\n float t=iTime*.18;\n float fold=p.y+.38*sin(p.x*3.+t)+.12*sin(p.x*5.-t*.6);\n float h=.38*sin(fold*5.4)+.10*cos(p.x*2.-p.y*2.+t);\n return h+.026*sin(fold*31.)*exp(-pow(sin(fold*5.4)*2.,2.));\n}\nvec3 sampleEnv(vec3 R,float shift){\n float pitch=asin(clamp(R.y,-1.,1.)),yaw=atan(R.z,R.x);\n float b1=smoothstep(.55,.95,sin(yaw*2.+pitch*3.+shift));\n float b2=smoothstep(.75,.99,cos(yaw*3.-pitch*4.+shift));\n return vec3(.008,.004,.017)+b1*vec3(.52,.38,.74)*.85+b2*vec3(.89,.83,1.)*1.6;\n}\nvoid mainImage(out vec4 color,in vec2 fragCoord){\n vec2 uv=(fragCoord-.5*iResolution.xy)/iResolution.y*2.65;\n float h=heightField(uv),eps=.006;\n vec3 N=normalize(vec3(-(heightField(uv+vec2(eps,0.))-h)/eps*.55,-(heightField(uv+vec2(0.,eps))-h)/eps*.55,1.));\n vec3 V=normalize(vec3(0.,0.,2.2)-vec3(uv,h*.18));float nv=max(dot(N,V),.001);\n vec3 L1=normalize(vec3(.6,.75,.85)),L2=normalize(vec3(-.75,-.45,.65));\n vec3 col=mix(vec3(.08,.025,.17),vec3(.65,.49,.83),.5+.5*h)+vec3(.35,.24,.5)*pow(max(dot(N,L1),0.),8.);\n#if SKILL\n float fresnel=.12+.88*pow(1.-nv,4.5);\n vec3 Tr=refract(-V,N,1./1.48),Tg=refract(-V,N,1./1.52),Tb=refract(-V,N,1./1.56);\n vec3 transmitted=vec3(sampleEnv(Tr,h*1.2+.22).r,sampleEnv(Tg,h*1.2).g,sampleEnv(Tb,h*1.2-.22).b);\n float thickness=clamp(.65-h*.45,.1,1.3);\n // Violet tint requested by the reference: stronger green absorption.\n transmitted*=exp(-vec3(.28,.65,.12)*thickness*2.2);\n vec3 film=thinFilmPalette(nv*2.4+h*1.6-iTime*.15);\n vec3 reflected=sampleEnv(reflect(-V,N),h*1.2)*mix(vec3(1.),mix(film,vec3(.8,.55,1.),.8),.65);\n float key=pow(max(dot(N,normalize(L1+V)),0.),180.)*3.8;\n float fill=pow(max(dot(N,normalize(L2+V)),0.),90.)*1.4;\n float halo=pow(max(dot(N,normalize(L1+V)),0.),24.)*.45;\n col=mix(transmitted,reflected,fresnel)+vec3(.8,.65,1.)*(fill+halo)*.45;\n key=min(key,2.5);col+=key/(1.+.25*key);\n float rim=smoothstep(.8,.95,1.-nv);col*=1.-.25*smoothstep(.55,.8,1.-nv)*(1.-rim);col+=rim*vec3(.48,.37,.65);\n#endif\n col*=max(.45,1.-dot(uv,uv)*.07)*1.15;\n col=clamp((col*(2.51*col+.03))/(col*(2.43*col+.59)+.14),0.,1.);\n color=vec4(pow(col,vec3(1./2.2)),1.);\n}\n";
+ const sh=(t,s)=>{const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);return x};
+ const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,wrap(src)));gl.linkProgram(pr);
+ if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return console.error(gl.getProgramInfoLog(pr));
+ gl.useProgram(pr);gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+ const a=gl.getAttribLocation(pr,"p");gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);
+ const R=gl.getUniformLocation(pr,"iResolution"),T=gl.getUniformLocation(pr,"iTime"),M=gl.getUniformLocation(pr,"iMouse");
+ let mx=0,my=0,down=0;
+ const at=e=>{mx=e.clientX/innerWidth*c.width;my=(1-e.clientY/innerHeight)*c.height};
+ addEventListener("pointermove",at);addEventListener("pointerdown",e=>{at(e);down=1});addEventListener("pointerup",()=>down=0);
+ const size=()=>{const d=Math.min(devicePixelRatio,1.5);c.width=innerWidth*d;c.height=innerHeight*d;gl.viewport(0,0,c.width,c.height);gl.uniform3f(R,c.width,c.height,1);mx=c.width/2;my=c.height/2};
+ addEventListener("resize",size);size();
+ const draw=n=>{gl.uniform1f(T,n/1000);gl.uniform4f(M,mx,my,down?mx:-mx,down?my:-my);gl.drawArrays(gl.TRIANGLES,0,3);requestAnimationFrame(draw)};
+ requestAnimationFrame(draw);
+})();
+</script>

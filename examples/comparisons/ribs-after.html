@@ -1,0 +1,28 @@
+<!doctype html><meta charset="utf-8"><title>Shader</title>
+<style>html,body,canvas{display:block;width:100%;height:100%;margin:0;background:#000}</style>
+<canvas id="c"></canvas>
+<script>
+// Runs a Shadertoy-style mainImage file: shader.html?src=name.glsl
+const VS=`#version 300 es
+in vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+const wrap=s=>`#version 300 es
+precision highp float;uniform vec3 iResolution;uniform float iTime;uniform float iTimeDelta;uniform int iFrame;uniform vec4 iMouse;out vec4 o_;
+${s}
+void main(){vec4 v;mainImage(v,gl_FragCoord.xy);o_=vec4(v.rgb,1.);}`;
+(async()=>{
+ const gl=c.getContext("webgl2"),src="#define SKILL 1\n#define DARK 0\n#ifndef SKILL\n#define SKILL 0\n#endif\n#ifndef DARK\n#define DARK 0\n#endif\nvec3 thinFilmPalette(float phase){return .5+.5*cos(6.283185*(vec3(phase)+vec3(0.,.33,.67)));}\nvec3 warmPalette(float v){return mix(vec3(.95,.06,.42),vec3(1.,.38,.055),.5+.5*sin(v));}\nvec3 pinkSpectrum(float v){vec3 c=thinFilmPalette(v);float green=max(0.,c.g-max(c.r,c.b));return clamp(c+green*vec3(.9,-.92,.55),0.,1.);}\nfloat heightField(vec2 p){float t=iTime*.22;float x=p.x+.033*sin(p.y*2.+t);float r=cos(x*15.);return r*.16+.035*sin(p.y*3.5+t+x*7.);}\nvec3 sampleEnv(vec3 R,float shift){float pitch=asin(clamp(R.y,-1.,1.)),yaw=atan(R.z,R.x);float b1=smoothstep(.55,.95,sin(yaw*2.+pitch*3.+shift)),b2=smoothstep(.75,.99,cos(yaw*3.-pitch*4.+shift));\n#if DARK\n return vec3(.001)+b1*pinkSpectrum(pitch*.3+shift*.12)*1.2+b2*pinkSpectrum(pitch*.4+.3)*1.6;\n#else\n return vec3(.12,.017,.045)+b1*warmPalette(pitch*2.+shift)*1.2+b2*vec3(1.,.76,.6)*1.6;\n#endif\n}\nvoid mainImage(out vec4 color,in vec2 fragCoord){\n vec2 uv=(fragCoord-.5*iResolution.xy)/iResolution.y*2.3;\n float h=heightField(uv),eps=.006;\n vec3 N=normalize(vec3(-(heightField(uv+vec2(eps,0.))-h)/eps*.55,-(heightField(uv+vec2(0.,eps))-h)/eps*.55,1.));\n vec3 V=normalize(vec3(0.,0.,2.2)-vec3(uv,h*.18));float nv=max(dot(N,V),.001);\n float x=uv.x+.033*sin(uv.y*2.+iTime*.22);\n float phase=x*15.+uv.y*1.5+iTime*.1;\n#if DARK\n float band=pow(.5+.5*sin(phase),5.);vec3 col=pinkSpectrum(phase*.08)*band*.7;\n#else\n vec3 col=warmPalette(uv.y*2.+x*3.+iTime*.1)*(.45+.55*(.5+.5*cos(x*15.)));\n#endif\n#if SKILL\n float F=.12+.88*pow(1.-nv,4.5);\n vec3 transmitted=vec3(sampleEnv(refract(-V,N,1./1.48),h*1.2+.22).r,sampleEnv(refract(-V,N,1./1.52),h*1.2).g,sampleEnv(refract(-V,N,1./1.56),h*1.2-.22).b);\n float thickness=clamp(.65-h*.45,.1,1.3);\n // Warm absorption art direction retains pink/orange instead of navy valleys.\n transmitted*=exp(-vec3(.18,.6,.5)*thickness*2.2);\n#if DARK\n vec3 film=pinkSpectrum(nv*2.4+h*1.6-iTime*.035);\n#else\n vec3 film=warmPalette(nv*8.+h*5.-iTime*.2);\n#endif\n vec3 reflected=sampleEnv(reflect(-V,N),h*1.2)*mix(vec3(1.),film,.65);\n vec3 L1=normalize(vec3(.6,.75,.85)),L2=normalize(vec3(-.75,-.45,.65));\n float key=pow(max(dot(N,normalize(L1+V)),0.),180.)*3.8;\n float fill=pow(max(dot(N,normalize(L2+V)),0.),90.)*1.4;\n float rim=pow(max(dot(N,normalize(L1+V)),0.),24.)*.45;\n col=mix(transmitted,reflected,F)+film*(fill+rim)*.3+min(key,2.5)*.12;\n#if DARK\n float darkness=smoothstep(.48,.84,sin(phase+sin(uv.y*2.-iTime*.25)));\n col*=darkness;col+=film*pow(max(0.,1.-nv),5.)*.3;\n#else\n // Satin rather than mirror: soften the contrast of the warm studio reflections.\n col=mix(col,warmPalette(uv.y*2.+iTime*.1)*.6,.25);\n#endif\n#endif\n col*=1.15;col=clamp((col*(2.51*col+.03))/(col*(2.43*col+.59)+.14),0.,1.);\n color=vec4(pow(col,vec3(1./2.2)),1.);\n}\n";
+ const sh=(t,s)=>{const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);return x};
+ const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,wrap(src)));gl.linkProgram(pr);
+ if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return console.error(gl.getProgramInfoLog(pr));
+ gl.useProgram(pr);gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+ const a=gl.getAttribLocation(pr,"p");gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);
+ const R=gl.getUniformLocation(pr,"iResolution"),T=gl.getUniformLocation(pr,"iTime"),M=gl.getUniformLocation(pr,"iMouse");
+ let mx=0,my=0,down=0;
+ const at=e=>{mx=e.clientX/innerWidth*c.width;my=(1-e.clientY/innerHeight)*c.height};
+ addEventListener("pointermove",at);addEventListener("pointerdown",e=>{at(e);down=1});addEventListener("pointerup",()=>down=0);
+ const size=()=>{const d=Math.min(devicePixelRatio,1.5);c.width=innerWidth*d;c.height=innerHeight*d;gl.viewport(0,0,c.width,c.height);gl.uniform3f(R,c.width,c.height,1);mx=c.width/2;my=c.height/2};
+ addEventListener("resize",size);size();
+ const draw=n=>{gl.uniform1f(T,n/1000);gl.uniform4f(M,mx,my,down?mx:-mx,down?my:-my);gl.drawArrays(gl.TRIANGLES,0,3);requestAnimationFrame(draw)};
+ requestAnimationFrame(draw);
+})();
+</script>

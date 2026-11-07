@@ -1,0 +1,13 @@
+# Python environment
+.venv/
+__pycache__/
+
+# macOS
+.DS_Store
+
+# Local working files: renders, downloaded fonts, generated examples
+previews/
+fonts/
+/*.html
+/*.glsl
+!/liquid-glass.example.glsl
