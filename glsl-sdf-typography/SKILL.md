@@ -1,6 +1,6 @@
 ---
 name: glsl-sdf-typography
-description: Writes any word, name or sentence as 3D liquid glass lettering in GLSL, in any real font (Google Fonts by name, a font file, or a vibe such as romantic, cloud, medieval, cartoon) or in hand-built neon tubes, filled with the moving liquid glass surface, on a solid background color (black by default) or on the user's own image, with a ready-to-open HTML preview. Reads plain-language requests or the /liquid-glass short syntax to find the text, the background color and which letter marks (i/j dots, punctuation dots, accents) to replace with shapes from glsl-sdf-shapes. Use when the user asks to write, spell or render a word, name, title, phrase or sentence in glass, GLSL or SDF, or to replace the dot or accent of a letter with a heart, star or other shape.
+description: Writes any word, name or sentence as 3D liquid glass lettering in GLSL, in any real font (Google Fonts by name, a font file, or a vibe such as romantic, cloud, medieval, cartoon) or in hand-built neon tubes, filled with the moving liquid glass surface, on a solid background color (black by default) or on the user's own image, with a ready-to-open HTML preview. Reads plain-language requests or the /liquid-glass-skill short syntax to find the text, the background color and which letter marks (i/j dots, punctuation dots, accents) to replace with shapes from glsl-sdf-shapes. Use when the user asks to write, spell or render a word, name, title, phrase or sentence in glass, GLSL or SDF, or to replace the dot or accent of a letter with a heart, star or other shape.
 ---
 
 # GLSL SDF Typography Builder
@@ -10,7 +10,7 @@ You are a GLSL SDF (Signed Distance Field) typography expert. When invoked, read
 DO NOT hardcode the entire alphabet. Only generate SDF functions for the characters actually present in the requested text.
 
 ## 2. Reading the Request
-Requests come either as the `/liquid-glass` short syntax (that skill defines it), or as plain sentences, for example:
+Requests come either as the `/liquid-glass-skill` short syntax (that skill defines it), or as plain sentences, for example:
 - *"Write 'Joyeux anniversaire Mia' and replace the dot of the i in Mia with a heart."*
 - *"The phrase 'pixel jam': the i gets a star instead of its dot, the j a diamond, cream background."*
 - *"Bonjour Chloé on two lines, with a little moon instead of the accent on the é."*
@@ -25,7 +25,7 @@ Extract five things:
    - Shapes come from the `glsl-sdf-shapes` catalogue. If a requested shape is not listed, build it as that skill describes and say it is a composed approximation.
    - Default: the shape replaces the whole mark (both dots of a diaeresis unless the user says one), floats above the letter, and has the same glass as the letters.
 4. **Font or vibe** (section 2.1). A mood word ("storybook", "romantic", "fluffy") picks a vibe. Default: `DM Serif Display`.
-5. **Background.** One solid color, black `#000000` by default (or the vibe's color). Accept color names (the `liquid-glass` skill has the table) and hex codes. **Or an image** the user gives (a file path, or an image attached to the message: save it to a file first), see section 2.2. The liquid surface is never shown around the letters, only inside them (section 7.2): letters in front of a moving liquid background cannot be read. That surface alone, as a full-screen background, is the `glsl-liquid-glass` skill.
+5. **Background.** One solid color, black `#000000` by default (or the vibe's color). Accept color names (the `liquid-glass-skill` skill has the table) and hex codes. **Or an image** the user gives (a file path, or an image attached to the message: save it to a file first), see section 2.2. The liquid surface is never shown around the letters, only inside them (section 7.2): letters in front of a moving liquid background cannot be read. That surface alone, as a full-screen background, is the `glsl-liquid-glass` skill.
 
 | Replaceable mark | Characters | Default build | Centre |
 |---|---|---|---|

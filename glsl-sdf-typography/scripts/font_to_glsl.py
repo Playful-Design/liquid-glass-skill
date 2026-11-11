@@ -742,7 +742,7 @@ vec2 sdfText(vec2 p)
         where = f' in "{mk["word"]}"' if mk["word"] else (f" #{mk['occ']}" if mk["occ"] not in (None, "all") else " (all)")
         mk_lines.append(("whole letter " if mk.get("whole") else "mark of ") + f"'{mk['ch']}'{where} -> {mk['shape']}" + (f" x{mk['scale']}" if mk["scale"] != 1 else ""))
     header = [
-        f'//  "{a.text.replace("/", " / ")}" in liquid glass  (/liquid-glass, lettering mode)',
+        f'//  "{a.text.replace("/", " / ")}" in liquid glass  (/liquid-glass-skill, lettering mode)',
         "//",
         f"//  Text        : {' '.join(lines_txt)}",
         f"//  Lines       : {len(lines_txt)}  ->  " + " / ".join(f'"{l}"' for l in lines_txt),

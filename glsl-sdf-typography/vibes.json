@@ -1,5 +1,5 @@
 {
-  "about": "Vibes: a mood word -> a Google Font and the settings that make it look good in liquid glass. Used by font_to_glsl.py --vibe NAME and by /liquid-glass ... vibe NAME. Add your own: any Google Fonts family, plus optional style, axes, bg, puff, tracking (em), simplify. Explicit options always win over the vibe.",
+  "about": "Vibes: a mood word -> a Google Font and the settings that make it look good in liquid glass. Used by font_to_glsl.py --vibe NAME and by /liquid-glass-skill ... vibe NAME. Add your own: any Google Fonts family, plus optional style, axes, bg, puff, tracking (em), simplify. Explicit options always win over the vibe.",
   "vibes": {
     "adventure": {
       "google": "Caprasimo",
