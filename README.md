@@ -8,7 +8,7 @@ A set of Agent Skills for Claude Code that create **liquid glass** in GLSL shade
 npx skills add Playful-Design/liquid-glass-skill
 ```
 
-Install the full collection so the `liquid-glass-skill` entry skill can route to the background, typography, shape, glassmorphism, and material skills. The repository owner is `Playful-Design`.
+Install the full collection so the `shader-liquid-glass` entry skill can route to the background, typography, shape, glassmorphism, and material skills. The repository owner is `Playful-Design`.
 
 Everything can run from one command:
 
