@@ -1,9 +1,9 @@
 ---
-name: shader-liquid-glass
-description: Single entry point for every glass GLSL shader, from words or an image. Picks the shape (animated liquid glass background via glsl-liquid-glass; 3D glass letters in any font or vibe via glsl-sdf-typography, with dots and accents replaced by shapes via glsl-sdf-shapes; a glass card, button or panel via glsl-glassmorphism) and the kind of glass (plain liquid, shard / broken glass, prism, crystal / gem), recognized automatically from the words or a reference image. Always delivers GLSL code. Understands the short syntax /shader-liquid-glass 'happy birthday' letter i in birthday shape heart background purple glass crystal, as well as plain sentences. Use when the user runs /shader-liquid-glass, or asks for any glass, liquid glass, glassmorphism, crystal, prism, gem, shard or broken glass shader, background, card, button, word, name, title or sentence, or shares an image of glass.
+name: liquid-glass
+description: Single entry point for every glass GLSL shader, from words or an image. Picks the shape (animated liquid glass background via glsl-liquid-glass; 3D glass letters in any font or vibe via glsl-sdf-typography, with dots and accents replaced by shapes via glsl-sdf-shapes; a glass card, button or panel via glsl-glassmorphism) and the kind of glass (plain liquid, shard / broken glass, prism, crystal / gem), recognized automatically from the words or a reference image. Always delivers GLSL code. Understands the short syntax /liquid-glass 'happy birthday' letter i in birthday shape heart background purple glass crystal, as well as plain sentences. Use when the user runs /liquid-glass, or asks for any glass, liquid glass, glassmorphism, crystal, prism, gem, shard or broken glass shader, background, card, button, word, name, title or sentence, or shares an image of glass.
 ---
 
-# /shader-liquid-glass: one command, any glass
+# /liquid-glass: one command, any glass
 
 Two choices make every shader: the **shape** (section 1) and the **glass** (section 1b). The result is always **GLSL code**: one complete Shadertoy-compatible `mainImage` in a `.glsl` file, whatever the user gives (words, an image or a shader). An `.html` preview is extra, never a replacement.
 
@@ -11,8 +11,8 @@ Two choices make every shader: the **shape** (section 1) and the **glass** (sect
 
 | The request contains… | Mode | Follow |
 |---|---|---|
-| No text to write and no card: `/shader-liquid-glass` alone, "make a liquid glass shader", "a liquid glass background", a glass object | **Background** | the `glsl-liquid-glass` skill, exactly as written |
-| Text to write: quoted text, words right after `/shader-liquid-glass`, or "write …" | **Lettering** | the `glsl-sdf-typography` skill (and `glsl-sdf-shapes` for any shape) |
+| No text to write and no card: `/liquid-glass` alone, "make a liquid glass shader", "a liquid glass background", a glass object | **Background** | the `glsl-liquid-glass` skill, exactly as written |
+| Text to write: quoted text, words right after `/liquid-glass`, or "write …" | **Lettering** | the `glsl-sdf-typography` skill (and `glsl-sdf-shapes` for any shape) |
 | `card`, button, panel, glassmorphism, UI glass | **Card** | the `glsl-glassmorphism` skill; `background COLOR` recolors its fluid backdrop |
 
 ## 1b. Pick the glass (material)
@@ -41,14 +41,14 @@ In Lettering mode the text is cut out of one continuous liquid glass surface (th
 ## 2. Short syntax
 
 ```
-/shader-liquid-glass 'TEXT' [letter X [in WORD] [OCCURRENCE] shape SHAPE [whole] [small|big|bigger] [COLOR] [melted]]... [vibe NAME | font NAME [bold|italic|weight N]] [background COLOR | image PATH [clear|liquid]] [tint COLOR] [rainbow] [3d] [lines N] [glass TYPE] [FINISH]
-/shader-liquid-glass card [background COLOR] [glass TYPE] [FINISH]
-/shader-liquid-glass [glass TYPE] [FINISH]
+/liquid-glass 'TEXT' [letter X [in WORD] [OCCURRENCE] shape SHAPE [whole] [small|big|bigger] [COLOR] [melted]]... [vibe NAME | font NAME [bold|italic|weight N]] [background COLOR | image PATH [clear|liquid]] [tint COLOR] [rainbow] [3d] [lines N] [glass TYPE] [FINISH]
+/liquid-glass card [background COLOR] [glass TYPE] [FINISH]
+/liquid-glass [glass TYPE] [FINISH]
 ```
 
 | Part | Meaning | Default |
 |---|---|---|
-| `'TEXT'` or `"TEXT"` | Text to write, exactly as typed (case, accents, punctuation). Without quotes: every word after `/shader-liquid-glass` up to the first keyword. A `/` inside the text forces a line break. | required |
+| `'TEXT'` or `"TEXT"` | Text to write, exactly as typed (case, accents, punctuation). Without quotes: every word after `/liquid-glass` up to the first keyword. A `/` inside the text forces a line break. | required |
 | `letter X` | Character whose dot or accent is replaced (see the marks table in `glsl-sdf-typography`) | none |
 | `in WORD` | Only the occurrences of X inside that word | every word |
 | `OCCURRENCE` | `first`, `second`, `third`, `last`, `all`, or a number | all occurrences |
@@ -94,17 +94,17 @@ Any other name: choose a sensible hex and state it. `light X` / `dark X`: mix X 
 
 | Command | Reading |
 |---|---|
-| `/shader-liquid-glass` | Background mode |
-| `/shader-liquid-glass 'Mia'` | "Mia", black background |
-| `/shader-liquid-glass 'happy birthday' letter i in birthday shape heart background purple` | i of *birthday* → heart, purple `#6B40A1` |
-| `/shader-liquid-glass 'pixel jam' letter i shape star letter j shape diamond background cream` | i → star, j → diamond, cream |
-| `/shader-liquid-glass 'Bonjour / Chloé' lettre é forme lune fond #FDE2E4` | 2 lines, accent of é → moon, pale pink |
-| `/shader-liquid-glass 'Mia' letter i shape heart red frost` | red glass heart, then `/frost` |
-| `/shader-liquid-glass 'I love / Playful Design!' letter i in Design shape star letter ! shape heart font Pacifico background light purple` | script font Pacifico, i of *Design* → star, ! → heart, `#B5A0D0` |
-| `/shader-liquid-glass 'Be mine' letter i shape heart vibe valentine` | Lavishly Yours, i → heart, blush `#F6D5DC` |
-| `/shader-liquid-glass 'Summer!' letter ! shape heart vibe cloud image ~/Pictures/beach.jpg` | Rubik Bubbles on the photo, plus `summer.html` to watch it live |
-| `/shader-liquid-glass 'Mia' glass crystal` | "Mia" in cut-crystal glass, black background |
-| `/shader-liquid-glass card background lavender glass shard` | glassmorphism card on lavender, broken window glass |
+| `/liquid-glass` | Background mode |
+| `/liquid-glass 'Mia'` | "Mia", black background |
+| `/liquid-glass 'happy birthday' letter i in birthday shape heart background purple` | i of *birthday* → heart, purple `#6B40A1` |
+| `/liquid-glass 'pixel jam' letter i shape star letter j shape diamond background cream` | i → star, j → diamond, cream |
+| `/liquid-glass 'Bonjour / Chloé' lettre é forme lune fond #FDE2E4` | 2 lines, accent of é → moon, pale pink |
+| `/liquid-glass 'Mia' letter i shape heart red frost` | red glass heart, then `/frost` |
+| `/liquid-glass 'I love / Playful Design!' letter i in Design shape star letter ! shape heart font Pacifico background light purple` | script font Pacifico, i of *Design* → star, ! → heart, `#B5A0D0` |
+| `/liquid-glass 'Be mine' letter i shape heart vibe valentine` | Lavishly Yours, i → heart, blush `#F6D5DC` |
+| `/liquid-glass 'Summer!' letter ! shape heart vibe cloud image ~/Pictures/beach.jpg` | Rubik Bubbles on the photo, plus `summer.html` to watch it live |
+| `/liquid-glass 'Mia' glass crystal` | "Mia" in cut-crystal glass, black background |
+| `/liquid-glass card background lavender glass shard` | glassmorphism card on lavender, broken window glass |
 | *"a glass prism throwing rainbows"* | Background mode, prism (detected) |
 
 ## 3. Before the code

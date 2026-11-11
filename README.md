@@ -8,12 +8,12 @@ A set of Agent Skills for Claude Code that create **liquid glass** in GLSL shade
 npx skills add Playful-Design/liquid-glass-skill
 ```
 
-Install the full collection so the `shader-liquid-glass` entry skill can route to the background, typography, shape, glassmorphism, and material skills. The repository owner is `Playful-Design`.
+Install the full collection so the `liquid-glass` entry skill can route to the background, typography, shape, glassmorphism, and material skills. The repository owner is `Playful-Design`.
 
 Everything can run from one command:
 
 ```
-/shader-liquid-glass 'i love Playful!' letter i shape heart letter ! shape sparkle vibe dripping background lilac
+/liquid-glass 'i love Playful!' letter i shape heart letter ! shape sparkle vibe dripping background lilac
 ```
 
 ## Before and after examples
@@ -82,13 +82,13 @@ Describe the text, shapes and mood in one sentence. The skill handles the glass,
 
 ### 1. One command, two modes
 
-`/shader-liquid-glass` reads your request and picks the mode:
+`/liquid-glass` reads your request and picks the mode:
 
-- **No text** → the **liquid glass background** (`/shader-liquid-glass`, or "make a liquid glass shader").
-- **Text** → **liquid glass lettering** (`/shader-liquid-glass 'butterfly'`, or "write butterfly in liquid glass").
+- **No text** → the **liquid glass background** (`/liquid-glass`, or "make a liquid glass shader").
+- **Text** → **liquid glass lettering** (`/liquid-glass 'butterfly'`, or "write butterfly in liquid glass").
 
 ```sh
-/shader-liquid-glass 'butterfly' font "DM Serif Display" background black
+/liquid-glass 'butterfly' font "DM Serif Display" background black
 ```
 
 [Butterfly lettering HTML](examples/lettering/butterfly.html) · [GLSL](examples/lettering/butterfly.glsl)
@@ -116,7 +116,7 @@ Instead of picking a font, describe a mood. Each vibe picks a font, plus the set
 | `medieval` | fantasy, celtic | Uncial Antiqua |
 
 ```
-/shader-liquid-glass 'Be mine' letter i shape heart bigger vibe valentine
+/liquid-glass 'Be mine' letter i shape heart bigger vibe valentine
 ```
 
 Vibes live in one small file (`glsl-sdf-typography/vibes.json`), so you can add your own.
@@ -197,7 +197,7 @@ In short, **glassmorphism imitates frosted glass with blur. Liquid glass simulat
 
 | Skill | Role |
 |---|---|
-| [`shader-liquid-glass`](./shader-liquid-glass/SKILL.md) | The `/shader-liquid-glass` command: reads your request and picks the mode |
+| [`liquid-glass`](./liquid-glass/SKILL.md) | The `/liquid-glass` command: reads your request and picks the mode |
 | [`glsl-liquid-glass`](./glsl-liquid-glass/) | The liquid glass background: the optical recipe (Fresnel, dispersion, absorption, iridescence, lighting) |
 | [`glsl-sdf-typography`](./glsl-sdf-typography/SKILL.md) | The lettering: font script, vibes, carved-glass and 3D looks, image backgrounds, live preview page |
 | [`glsl-sdf-shapes`](./glsl-sdf-shapes/SKILL.md) | The library of shapes that replace dots and letters |
@@ -208,7 +208,7 @@ In short, **glassmorphism imitates frosted glass with blur. Liquid glass simulat
 Copy the skill folders into `~/.claude/skills/` (every project) or `.claude/skills/` (one project):
 
 ```bash
-for s in shader-liquid-glass glsl-liquid-glass glsl-sdf-typography glsl-sdf-shapes; do
+for s in liquid-glass glsl-liquid-glass glsl-sdf-typography glsl-sdf-shapes; do
   cp -R "$s" ~/.claude/skills/
 done
 cp -R glsl-glass-appearance/* ~/.claude/skills/
@@ -225,11 +225,11 @@ Fonts are downloaded from Google Fonts the first time you use them, then cached.
 ## Examples
 
 ```
-/shader-liquid-glass
-/shader-liquid-glass 'Mia' letter i shape heart background pink
-/shader-liquid-glass 'happy birthday' letter i in birthday shape star vibe cloud background light blue
-/shader-liquid-glass 'I love / playful Design !' letter o shape fullmoon whole letter i shape butterfly bigger letter ! shape star vibe adventure background lilac tint pink
-/shader-liquid-glass 'Summer!' letter ! shape heart vibe cloud image ~/Pictures/beach.jpg
+/liquid-glass
+/liquid-glass 'Mia' letter i shape heart background pink
+/liquid-glass 'happy birthday' letter i in birthday shape star vibe cloud background light blue
+/liquid-glass 'I love / playful Design !' letter o shape fullmoon whole letter i shape butterfly bigger letter ! shape star vibe adventure background lilac tint pink
+/liquid-glass 'Summer!' letter ! shape heart vibe cloud image ~/Pictures/beach.jpg
 ```
 
 ## Good to know
